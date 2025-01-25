@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "rpx"
-  text: "For a better local environment."
-  tagline: "Modern and smart reverse proxy."
+  name: "httx"
+  text: "Modern and fast HTTP client."
+  tagline: "Like httpie, but for TypeScript."
   image: /images/logo-white.png
   actions:
     - theme: brand
