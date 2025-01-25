@@ -1,5 +1,6 @@
-import { Result, err, ok } from 'neverthrow'
-import type { RequestOptions, HttxResponse, HttxConfig } from './types'
+import type { Result } from 'neverthrow'
+import type { HttxConfig, HttxResponse, RequestOptions } from './types'
+import { err, ok } from 'neverthrow'
 import { debugLog } from './utils'
 
 export class HttxClient {
@@ -17,7 +18,7 @@ export class HttxClient {
 
   async request<T = unknown>(
     url: string,
-    options: RequestOptions
+    options: RequestOptions,
   ): Promise<Result<HttxResponse<T>, Error>> {
     const startTime = performance.now()
 
@@ -34,7 +35,7 @@ export class HttxClient {
         ...options,
         headers: this.buildHeaders(options),
         signal: options.signal || timeoutSignal || controller.signal,
-        body: await this.buildBody(options)
+        body: await this.buildBody(options),
       }
 
       const response = await fetch(finalUrl, {
@@ -53,17 +54,16 @@ export class HttxClient {
         timings: {
           start: startTime,
           end: endTime,
-          duration: endTime - startTime
-        }
+          duration: endTime - startTime,
+        },
       }
 
-      debugLog('response',
-        `${result.status} ${result.statusText} (${result.timings.duration}ms)`,
-        this.config.verbose
+      debugLog('response', `${result.status} ${result.statusText} (${result.timings.duration}ms)`, this.config.verbose,
       )
 
       return ok(result)
-    } catch (error) {
+    }
+    catch (error) {
       return err(error instanceof Error ? error : new Error(String(error)))
     }
   }
@@ -92,9 +92,11 @@ export class HttxClient {
     if (options.json) {
       headers.set('Content-Type', 'application/json')
       headers.set('Accept', 'application/json')
-    } else if (options.form) {
+    }
+    else if (options.form) {
       headers.set('Content-Type', 'application/x-www-form-urlencoded')
-    } else if (options.multipart) {
+    }
+    else if (options.multipart) {
       // Content-Type is automatically set for FormData
       headers.delete('Content-Type')
     }
@@ -103,29 +105,30 @@ export class HttxClient {
   }
 
   private async buildBody(options: RequestOptions): Promise<BodyInit | undefined> {
-      if (!options.body) return undefined
+    if (!options.body)
+      return undefined
 
-      if (options.json) {
-        return JSON.stringify(options.body)
+    if (options.json) {
+      return JSON.stringify(options.body)
+    }
+
+    if (options.form && (typeof options.body === 'object' && !(options.body instanceof FormData) && !(options.body instanceof URLSearchParams))) {
+      const formData: Record<string, string> = {}
+      for (const [key, value] of Object.entries(options.body)) {
+        formData[key] = String(value)
       }
+      return new URLSearchParams(formData).toString()
+    }
 
-      if (options.form && (typeof options.body === 'object' && !(options.body instanceof FormData) && !(options.body instanceof URLSearchParams))) {
-        const formData: Record<string, string> = {}
-        for (const [key, value] of Object.entries(options.body)) {
-          formData[key] = String(value)
-        }
-        return new URLSearchParams(formData).toString()
-      }
+    if (options.body instanceof FormData || options.body instanceof URLSearchParams) {
+      return options.body
+    }
 
-      if (options.body instanceof FormData || options.body instanceof URLSearchParams) {
-        return options.body
-      }
+    if (typeof options.body === 'string') {
+      return options.body
+    }
 
-      if (typeof options.body === 'string') {
-        return options.body
-      }
-
-      throw new Error('Invalid body type')
+    throw new Error('Invalid body type')
   }
 
   private async parseResponse<T>(response: Response): Promise<T> {

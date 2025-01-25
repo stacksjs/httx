@@ -53,7 +53,11 @@ In case you are trying to start multiple proxies, you may use this configuration
 ### CLI
 
 ```bash
-httx ...
+httx get api.example.com/users
+httx post api.example.com/users name=john email=john@example.com -j
+httx get api.example.com/files file@./data.txt -m
+httx get api.example.com/secure -a username:password
+
 httx --help
 httx --version
 ```

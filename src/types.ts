@@ -36,7 +36,6 @@ export interface HttxConfig {
   timeout?: number
 }
 
-
 export interface HttxResponse<T = unknown> {
   status: number
   statusText: string
