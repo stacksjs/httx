@@ -1,7 +1,7 @@
 {
   "name": "httx",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": " A modern command-line & library HTTP client, for the API era. Like httpie, written in & for TypeScript.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
