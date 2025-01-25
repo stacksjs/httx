@@ -1,4 +1,3 @@
-// src/cli-parser.ts
 import type { HttpMethod, RequestOptions } from './types'
 import { HTTP_METHODS } from './types'
 import { debugLog } from './utils'
@@ -26,7 +25,7 @@ export function parseCliArgs(args: string[]): ParsedArgs {
   let url = ''
   const options: RequestOptions = {
     method: 'GET',
-    headers: {},
+    headers: {} as Record<string, string>,
     query: {},
     body: undefined,
   }
@@ -63,11 +62,13 @@ export function parseCliArgs(args: string[]): ParsedArgs {
       matched = true
 
       switch (type) {
-        case 'HEADER':
-          options.headers![key.trim()] = value.trim()
+        case 'HEADER': {
+          const headers = options.headers as Record<string, string>
+          headers[key.trim()] = value.trim()
           break
+        }
 
-        case 'DATA':
+        case 'DATA': {
           if (!options.body)
             options.body = {}
           if (options.body instanceof FormData) {
@@ -77,8 +78,9 @@ export function parseCliArgs(args: string[]): ParsedArgs {
             (options.body as Record<string, string>)[key.trim()] = value.trim()
           }
           break
+        }
 
-        case 'RAW_JSON':
+        case 'RAW_JSON': {
           if (!options.body || typeof options.body !== 'object' || options.body instanceof FormData) {
             options.body = {}
           }
@@ -90,19 +92,21 @@ export function parseCliArgs(args: string[]): ParsedArgs {
           }
           options.json = true
           break
+        }
 
-        case 'QUERY':
+        case 'QUERY': {
           options.query![key.trim()] = value.trim()
           break
+        }
 
-        case 'FILE_UPLOAD':
+        case 'FILE_UPLOAD': {
           if (!options.body || !(options.body instanceof FormData)) {
             options.body = new FormData()
             options.multipart = true
           }
-          // TODO: In real implementation, we would read the file here
           (options.body as FormData).append(key.trim(), value.trim())
           break
+        }
       }
       break
     }
