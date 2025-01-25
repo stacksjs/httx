@@ -35,16 +35,20 @@ export function parseCliArgs(args: string[]): ParsedArgs {
     if (!arg)
       continue
 
+    debugLog('parser', `Processing arg: ${arg}`)
+
     // First argument could be method
     if (i === 0) {
       if (isHttpMethod(arg.toUpperCase())) {
         method = arg.toUpperCase() as HttpMethod
         options.method = method
+        debugLog('parser', `Method set to: ${method}`)
         continue
       }
       else {
         // If first arg isn't a method, treat it as URL
         url = arg.includes('://') ? arg : `http://${arg}`
+        debugLog('parser', `URL set to: ${url}`)
         continue
       }
     }
@@ -52,6 +56,7 @@ export function parseCliArgs(args: string[]): ParsedArgs {
     // Second argument should be URL if not already set
     if (i === 1 && !url) {
       url = arg.includes('://') ? arg : `http://${arg}`
+      debugLog('parser', `URL set to: ${url}`)
       continue
     }
 
@@ -64,6 +69,7 @@ export function parseCliArgs(args: string[]): ParsedArgs {
 
       const [, key, value] = match
       matched = true
+      debugLog('parser', `Matched ${type} - Key: ${key}, Value: ${value}`)
 
       switch (type) {
         case 'HEADER': {
@@ -85,8 +91,8 @@ export function parseCliArgs(args: string[]): ParsedArgs {
           try {
             (options.body as Record<string, unknown>)[key.trim()] = JSON.parse(value.trim())
           }
-          catch {
-            (options.body as Record<string, string>)[key.trim()] = value.trim()
+          catch (e) {
+            debugLog('parser', `Failed to set JSON value: ${e}`)
           }
           options.json = true
           break
@@ -119,6 +125,10 @@ export function parseCliArgs(args: string[]): ParsedArgs {
   }
   catch (e) {
     throw new Error(`Invalid URL: ${url}`)
+  }
+
+  if (options.json) {
+    debugLog('parser', `Final request body: ${JSON.stringify(options.body)}`)
   }
 
   return { url, method, options }

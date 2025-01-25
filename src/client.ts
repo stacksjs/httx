@@ -34,6 +34,11 @@ export class HttxClient {
       const headers = this.buildHeaders(options)
       const body = await this.buildBody(options)
 
+      debugLog('request', `Request headers: ${JSON.stringify(Object.fromEntries(headers.entries()))}`, this.config.verbose)
+      if (body) {
+        debugLog('request', `Request body: ${typeof body === 'string' ? body : JSON.stringify(body)}`, this.config.verbose)
+      }
+
       const requestInit: RequestInit = {
         method: options.method,
         headers,
@@ -62,6 +67,7 @@ export class HttxClient {
       }
 
       debugLog('response', `${result.status} ${result.statusText} (${result.timings.duration}ms)`, this.config.verbose)
+      debugLog('response', `Response data: ${JSON.stringify(data)}`, this.config.verbose)
 
       return ok(result)
     }
@@ -113,6 +119,7 @@ export class HttxClient {
       return undefined
 
     if (options.json) {
+      debugLog('request', `Building JSON body from: ${JSON.stringify(options.body)}`, true)
       return JSON.stringify(options.body)
     }
 
