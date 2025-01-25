@@ -8,11 +8,17 @@
 
 # httx
 
-> httx is a simple, lightweight and user-friendly API client.
+> httx is a simple, fast, lightweight and user-friendly API client.
 
 ## Features
 
--
+- 🌐 **API Requests**: _make API requests_
+- 🤖 **CLI**: _a cross-platform CLI_
+- 📚 **Library**: _use httx as a library in your project_
+- ⚡ **Fast**: _extremely fast and efficient_
+- 🪶 **Lightweight**: _lightweight & without dependencies_
+- 🐶 **User-Friendly**: _user-friendly, simple, powerful API_
+- 💪🏽 **Type-Safe**: _strongly-typed, including type-safe errors_
 
 ## Install
 
@@ -36,7 +42,7 @@ Making requests is simple. There are two ways of getting started: _as a library 
 Given the npm package is installed:
 
 ```ts
-import type { httxConfig } from 'httx'
+import type { HttxConfig } from 'httx'
 import { ... } from 'httx'
 
 // ...
@@ -58,11 +64,11 @@ The Reverse Proxy can be configured using a `httx.config.ts` _(or `httx.config.j
 
 ```ts
 // httx.config.{ts,js}
-import type { httxOptions } from '@stacksjs/httx'
+import type { HttxOptions } from '@stacksjs/httx'
 import os from 'node:os'
 import path from 'node:path'
 
-const config: httxOptions = {
+const config: HttxOptions = {
   verbose: false,
 }
 
@@ -103,7 +109,7 @@ For casual chit-chat with others using this package:
 
 ## Postcardware
 
-Two things are true: Stacks OSS will always stay open-source, and we do love to receive postcards from wherever Stacks is used! 🌍 _We also publish them on our website. And thank you, Spatie_
+Two things are true: Stacks OSS will always stay open-source, and we do love to receive postcards from wherever Stacks is used! _We also publish them on our website._
 
 Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094 🌎
 
