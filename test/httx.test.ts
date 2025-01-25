@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 
-describe('@stacksjs/rpx', () => {
+describe('httx', () => {
   beforeAll(() => {
     process.env.APP_ENV = 'test'
   })
