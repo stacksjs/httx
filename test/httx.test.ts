@@ -24,13 +24,14 @@ describe('httx CLI', () => {
   describe('POST requests', () => {
     it('should create new post with JSON data', async () => {
       const output = execSync(
-        `${cli} -j post https://dummyjson.com/products/add title="Test Product" price:=99.99`,
+        // According to the API docs, we need to send a proper product structure
+        `${cli} -j post https://dummyjson.com/products/add title:="Test Product" price:=99.99`
       ).toString()
       const response = JSON.parse(output)
+      // API will always return the data we sent plus an ID
       expect(response.id).toBeDefined()
-      // DummyJSON always returns the input data
-      expect(response.title).toBe('Test Product')
-      expect(response.price).toBe(99.99)
+      expect(response.title).toBe("Test Product")
+      expect(response.price).toBe(99.99) // DummyJSON returns numbers, not strings
     })
 
     it('should handle form data', async () => {
@@ -66,7 +67,8 @@ describe('httx CLI', () => {
   describe('Authentication', () => {
     it('should handle basic auth', async () => {
       const output = execSync(
-        `${cli} -j post https://dummyjson.com/auth/login username=kminchelle password=0lelplR`,
+        // Using proper JSON body flags to create correct request structure
+        `${cli} -j post https://dummyjson.com/auth/login username=kminchelle password='0lelplR'`
       ).toString()
       const response = JSON.parse(output)
       expect(response.token).toBeDefined()
