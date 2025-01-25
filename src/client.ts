@@ -31,17 +31,24 @@ export class HttxClient {
         ? AbortSignal.timeout(options.timeout || this.config.timeout)
         : undefined
 
+      const headers = this.buildHeaders(options)
+      const body = await this.buildBody(options)
+
       const requestInit: RequestInit = {
-        ...options,
-        headers: this.buildHeaders(options),
+        method: options.method,
+        headers,
         signal: options.signal || timeoutSignal || controller.signal,
-        body: await this.buildBody(options),
+        body,
       }
 
       const response = await fetch(finalUrl, {
         ...requestInit,
         verbose: options.verbose || this.config.verbose !== false,
       })
+
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
 
       const data = await this.parseResponse<T>(response)
       const endTime = performance.now()
@@ -58,8 +65,7 @@ export class HttxClient {
         },
       }
 
-      debugLog('response', `${result.status} ${result.statusText} (${result.timings.duration}ms)`, this.config.verbose,
-      )
+      debugLog('response', `${result.status} ${result.statusText} (${result.timings.duration}ms)`, this.config.verbose)
 
       return ok(result)
     }
@@ -85,8 +91,9 @@ export class HttxClient {
     const headers = new Headers(this.config.defaultHeaders)
 
     if (options.headers) {
-      const customHeaders = new Headers(options.headers)
-      customHeaders.forEach((value, key) => headers.set(key, value))
+      Object.entries(options.headers).forEach(([key, value]) => {
+        headers.set(key, value)
+      })
     }
 
     if (options.json) {
@@ -112,20 +119,24 @@ export class HttxClient {
       return JSON.stringify(options.body)
     }
 
-    if (options.form && (typeof options.body === 'object' && !(options.body instanceof FormData) && !(options.body instanceof URLSearchParams))) {
-      const formData: Record<string, string> = {}
-      for (const [key, value] of Object.entries(options.body)) {
-        formData[key] = String(value)
-      }
-      return new URLSearchParams(formData).toString()
+    if (options.form && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+      const params = new URLSearchParams()
+      Object.entries(options.body).forEach(([key, value]) => {
+        params.append(key, String(value))
+      })
+      return params.toString()
     }
 
-    if (options.body instanceof FormData || options.body instanceof URLSearchParams) {
+    if (options.body instanceof FormData) {
       return options.body
     }
 
     if (typeof options.body === 'string') {
       return options.body
+    }
+
+    if (typeof options.body === 'object') {
+      return JSON.stringify(options.body)
     }
 
     throw new Error('Invalid body type')
