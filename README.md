@@ -23,7 +23,7 @@
 ## Install
 
 ```bash
-bun install -d httx
+bun install -d @stacksjs/httx
 ```
 
 <!-- _Alternatively, you can install:_
@@ -32,6 +32,9 @@ bun install -d httx
 brew install httx # wip
 pkgx install httx # wip
 ``` -->
+
+> [!NOTE]
+> We are trying to release under the `httx` package name, which is currently abandoned. Please @npmjs, we would love to!🙏🏽
 
 ## Get Started
 

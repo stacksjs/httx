@@ -1,5 +1,5 @@
 {
-  "name": "httx",
+  "name": "@stacksjs/httx",
   "type": "module",
   "version": "0.1.1",
   "description": " A modern command-line & library HTTP client, for the API era. Like httpie, written in & for TypeScript.",
