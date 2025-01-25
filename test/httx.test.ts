@@ -24,14 +24,12 @@ describe('httx CLI', () => {
   describe('POST requests', () => {
     it('should create new post with JSON data', async () => {
       const output = execSync(
-        // According to the API docs, we need to send a proper product structure
-        `${cli} -j post https://dummyjson.com/products/add title:="Test Product" price:=99.99`
+        `${cli} -j post https://dummyjson.com/products/add title="Test Product" price=99.99`,
       ).toString()
       const response = JSON.parse(output)
-      // API will always return the data we sent plus an ID
       expect(response.id).toBeDefined()
-      expect(response.title).toBe("Test Product")
-      expect(response.price).toBe(99.99) // DummyJSON returns numbers, not strings
+      expect(response.title).toBe('Test Product')
+      expect(response.price).toBe(99.99)
     })
 
     it('should handle form data', async () => {
@@ -50,7 +48,6 @@ describe('httx CLI', () => {
       ).toString()
       const response = JSON.parse(output)
       expect(response.id).toBe(1)
-      // DummyJSON returns the updated data
       expect(response.title).toBe('Updated Title')
     })
   })
@@ -67,8 +64,7 @@ describe('httx CLI', () => {
   describe('Authentication', () => {
     it('should handle basic auth', async () => {
       const output = execSync(
-        // Using proper JSON body flags to create correct request structure
-        `${cli} -j post https://dummyjson.com/auth/login username=kminchelle password='0lelplR'`
+        `${cli} -j post https://dummyjson.com/auth/login username=kminchelle password=0lelplR`,
       ).toString()
       const response = JSON.parse(output)
       expect(response.token).toBeDefined()
@@ -114,8 +110,8 @@ describe('httx CLI', () => {
   describe('Verbose output', () => {
     it('should show headers and timing in verbose mode', async () => {
       const output = execSync(`${cli} -v get https://dummyjson.com/todos/1`).toString()
-      expect(output).toContain('Response Headers')
-      expect(output).toMatch(/Request completed in \d+\.\d+ms/)
+      expect(output).toContain('Response Headers:')
+      expect(output).toMatch(/\[\w+:\w+\] \d{3} \w+ \(\d+\.\d+ms\)/)
     })
   })
 })
