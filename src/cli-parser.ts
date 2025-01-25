@@ -17,7 +17,7 @@ interface ParsedArgs {
 }
 
 function isHttpMethod(method: string): method is HttpMethod {
-  return Object.values(HTTP_METHODS).includes(method as any)
+  return Object.values(HTTP_METHODS).includes(method.toUpperCase() as HttpMethod)
 }
 
 export function parseCliArgs(args: string[]): ParsedArgs {
@@ -32,23 +32,27 @@ export function parseCliArgs(args: string[]): ParsedArgs {
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]
-
-    if (i === 0 && isHttpMethod(arg.toUpperCase())) {
-      method = arg.toUpperCase() as HttpMethod
-      options.method = method
+    if (!arg)
       continue
-    }
 
-    if (i === 0 || (i === 1 && method === arg)) {
-      try {
-        // Handle URLs with or without protocol
-        url = arg.includes('://') ? arg : `http://${arg}`
-        new URL(url) // Validate URL
+    // First argument could be method
+    if (i === 0) {
+      if (isHttpMethod(arg.toUpperCase())) {
+        method = arg.toUpperCase() as HttpMethod
+        options.method = method
         continue
       }
-      catch (e) {
-        debugLog('parser', `Invalid URL: ${arg}`)
+      else {
+        // If first arg isn't a method, treat it as URL
+        url = arg.includes('://') ? arg : `http://${arg}`
+        continue
       }
+    }
+
+    // Second argument should be URL if not already set
+    if (i === 1 && !url) {
+      url = arg.includes('://') ? arg : `http://${arg}`
+      continue
     }
 
     // Parse request items
@@ -63,27 +67,21 @@ export function parseCliArgs(args: string[]): ParsedArgs {
 
       switch (type) {
         case 'HEADER': {
-          const headers = options.headers as Record<string, string>
-          headers[key.trim()] = value.trim()
+          options.headers[key.trim()] = value.trim()
           break
         }
-
         case 'DATA': {
           if (!options.body)
             options.body = {}
-          if (options.body instanceof FormData) {
+          if (options.body instanceof FormData)
             options.body.append(key.trim(), value.trim())
-          }
-          else if (typeof options.body === 'object') {
+          else if (typeof options.body === 'object')
             (options.body as Record<string, string>)[key.trim()] = value.trim()
-          }
           break
         }
-
         case 'RAW_JSON': {
-          if (!options.body || typeof options.body !== 'object' || options.body instanceof FormData) {
+          if (!options.body || typeof options.body !== 'object' || options.body instanceof FormData)
             options.body = {}
-          }
           try {
             (options.body as Record<string, unknown>)[key.trim()] = JSON.parse(value.trim())
           }
@@ -93,12 +91,10 @@ export function parseCliArgs(args: string[]): ParsedArgs {
           options.json = true
           break
         }
-
         case 'QUERY': {
           options.query![key.trim()] = value.trim()
           break
         }
-
         case 'FILE_UPLOAD': {
           if (!options.body || !(options.body instanceof FormData)) {
             options.body = new FormData()
@@ -111,13 +107,18 @@ export function parseCliArgs(args: string[]): ParsedArgs {
       break
     }
 
-    if (!matched) {
+    if (!matched)
       debugLog('parser', `Unmatched argument: ${arg}`)
-    }
   }
 
-  if (!url) {
+  if (!url)
     throw new Error('No URL provided')
+
+  try {
+    new URL(url) // Validate URL
+  }
+  catch (e) {
+    throw new Error(`Invalid URL: ${url}`)
   }
 
   return { url, method, options }

@@ -22,57 +22,62 @@ cli
     try {
       const parsedArgs = parseCliArgs([method, url, ...items].filter(Boolean))
 
-      // Create client with merged config
       const client = new HttxClient({
         ...config,
         verbose: flags.verbose,
         timeout: flags.timeout ? Number.parseInt(flags.timeout) : undefined,
       })
 
-      // Merge CLI flags with parsed options
       const options = {
         ...parsedArgs.options,
         json: flags.json || parsedArgs.options.json,
         form: flags.form,
         multipart: flags.multipart,
+        headers: {
+          ...parsedArgs.options.headers,
+          ...(flags.auth && {
+            Authorization: `Basic ${Buffer.from(
+              `${flags.auth.split(':')[0]}:${flags.auth.split(':')[1] || ''}`,
+            ).toString('base64')}`,
+          }),
+        },
         downloadProgress: flags.download
           ? (progress: number) => {
-              process.stdout.write(`\rDownloading... ${(progress * 100).toFixed(1)}%`)
+              process.stdout.write(
+                `\rDownloading... ${(progress * 100).toFixed(1)}%`,
+              )
             }
           : undefined,
-      }
-
-      if (flags.auth) {
-        const [username, password] = flags.auth.split(':')
-        options.headers = {
-          ...options.headers,
-          Authorization: `Basic ${Buffer.from(`${username}:${password || ''}`).toString('base64')}`,
-        }
+        follow: flags.follow,
       }
 
       const result = await client.request(parsedArgs.url, options)
 
       result.match(
         (response) => {
-          if (flags.download) {
+          if (flags.download)
             process.stdout.write('\n')
-          }
 
+          // Print Response Headers
           if (flags.verbose) {
             console.log('\nResponse Headers:')
-            for (const [key, value] of response.headers.entries()) {
-              console.log(`${key}: ${value}`)
-            }
+            response.headers.forEach((value, key) => console.log(`${key}: ${value}`))
             console.log('\nResponse Body:')
           }
 
-          if (typeof response.data === 'string' || Buffer.isBuffer(response.data)) {
+          // Handle Response Body
+          const contentType = response.headers.get('content-type')
+          if (contentType?.includes('application/json')) {
+            console.log(JSON.stringify(response.data, null, 2))
+          }
+          else if (typeof response.data === 'string' || Buffer.isBuffer(response.data)) {
             process.stdout.write(response.data)
           }
           else {
-            console.log(JSON.stringify(response.data, null, 2))
+            console.log(response.data)
           }
 
+          // Print Timing Info
           if (flags.verbose) {
             console.log(`\nRequest completed in ${response.timings.duration.toFixed(2)}ms`)
           }
@@ -81,6 +86,8 @@ cli
         },
         (error) => {
           console.error('Error:', error.message)
+          if (flags.verbose && error.cause)
+            console.error('Cause:', error.cause)
           process.exit(1)
         },
       )
