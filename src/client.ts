@@ -46,10 +46,6 @@ export class HttxClient {
         verbose: options.verbose || this.config.verbose !== false,
       })
 
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-
       const data = await this.parseResponse<T>(response)
       const endTime = performance.now()
 
@@ -92,7 +88,8 @@ export class HttxClient {
 
     if (options.headers) {
       Object.entries(options.headers).forEach(([key, value]) => {
-        headers.set(key, value)
+        if (value)
+          headers.set(key, value)
       })
     }
 
@@ -144,6 +141,11 @@ export class HttxClient {
 
   private async parseResponse<T>(response: Response): Promise<T> {
     const contentType = response.headers.get('content-type')
+
+    if (!response.ok) {
+      const error = await response.text()
+      throw new Error(error)
+    }
 
     if (contentType?.includes('application/json')) {
       return response.json()
