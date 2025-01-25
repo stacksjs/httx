@@ -1,4 +1,16 @@
 
+## v0.1.1...main
+
+[compare changes](https://github.com/stacksjs/httx/compare/v0.1.1...main)
+
+### 🏡 Chore
+
+- Rename package ([36012f6](https://github.com/stacksjs/httx/commit/36012f6))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.1.0...main
 
 [compare changes](https://github.com/stacksjs/httx/compare/v0.1.0...main)
