@@ -8,7 +8,7 @@
 
 # httx
 
-> httx is a simple, fast, lightweight and user-friendly API client.
+> httx is a simple, fast, lightweight and user-friendly API client. Whether you are working with a CLI, a library or a server, httx is a perfect choice for making HTTP requests.
 
 ## Features
 
@@ -16,7 +16,7 @@
 - 🤖 **CLI**: _a cross-platform CLI_
 - 📚 **Library**: _use httx as a library in your project_
 - ⚡ **Fast**: _extremely fast and efficient_
-- 🪶 **Lightweight**: _lightweight & without dependencies_
+- 🪶 **Lightweight**: _built on web standards, lightweight & without dependencies_
 - 🐶 **User-Friendly**: _user-friendly, simple, powerful API_
 - 💪🏽 **Type-Safe**: _strongly-typed, including type-safe errors_
 
