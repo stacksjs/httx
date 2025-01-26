@@ -1,4 +1,16 @@
 
+## v0.1.3...main
+
+[compare changes](https://github.com/stacksjs/httx/compare/v0.1.3...main)
+
+### 🏡 Chore
+
+- Lint ([e855f8c](https://github.com/stacksjs/httx/commit/e855f8c))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.1.2...main
 
 [compare changes](https://github.com/stacksjs/httx/compare/v0.1.2...main)
