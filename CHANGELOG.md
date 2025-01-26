@@ -1,4 +1,36 @@
 
+## v0.1.2...main
+
+[compare changes](https://github.com/stacksjs/httx/compare/v0.1.2...main)
+
+### 📖 Documentation
+
+- Adjust hero ([9cdd570](https://github.com/stacksjs/httx/commit/9cdd570))
+
+### 🏡 Chore
+
+- Add bumpp to dev deps ([0f98e08](https://github.com/stacksjs/httx/commit/0f98e08))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
+## v0.1.2...main
+
+[compare changes](https://github.com/stacksjs/httx/compare/v0.1.2...main)
+
+### 📖 Documentation
+
+- Adjust hero ([9cdd570](https://github.com/stacksjs/httx/commit/9cdd570))
+
+### 🏡 Chore
+
+- Add bumpp to dev deps ([0f98e08](https://github.com/stacksjs/httx/commit/0f98e08))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.1.1...main
 
 [compare changes](https://github.com/stacksjs/httx/compare/v0.1.1...main)
