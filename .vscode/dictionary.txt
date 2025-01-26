@@ -24,6 +24,7 @@ iconify
 localtunnels
 lockb
 mkcert
+neverthrow
 nosniff
 openweb
 outdir
