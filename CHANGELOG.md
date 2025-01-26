@@ -1,4 +1,16 @@
 
+## v0.1.4...main
+
+[compare changes](https://github.com/stacksjs/httx/compare/v0.1.4...main)
+
+### 🩹 Fixes
+
+- **ci:** Adjust binary name in workflow ([6933ba6](https://github.com/stacksjs/httx/commit/6933ba6))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.1.3...main
 
 [compare changes](https://github.com/stacksjs/httx/compare/v0.1.3...main)
