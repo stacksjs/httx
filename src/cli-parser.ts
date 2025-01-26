@@ -121,8 +121,10 @@ export function parseCliArgs(args: string[]): ParsedArgs {
     throw new Error('No URL provided')
 
   try {
+    // eslint-disable-next-line no-new
     new URL(url) // Validate URL
   }
+  // eslint-disable-next-line unused-imports/no-unused-vars
   catch (e) {
     throw new Error(`Invalid URL: ${url}`)
   }

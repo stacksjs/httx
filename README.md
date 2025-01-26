@@ -46,7 +46,7 @@ Given the npm package is installed:
 
 ```ts
 import type { HttxConfig } from 'httx'
-import { ... } from 'httx'
+// import { ... } from 'httx'
 
 // ...
 ```
