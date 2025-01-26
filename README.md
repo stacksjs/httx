@@ -129,6 +129,7 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 
 ## Credits
 
+- [httpie](https://httpie.io/)
 - [Chris Breuer](https://github.com/chrisbbreuer)
 - [All Contributors](../../contributors)
 
