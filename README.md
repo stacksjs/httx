@@ -20,6 +20,8 @@
 - 🐶 **User-Friendly**: _user-friendly, simple, powerful API_
 - 💪🏽 **Type-Safe**: _strongly-typed, including type-safe errors_
 
+<p align="center"><img src="https://github.com/stacksjs/httx/blob/main/.github/art/screenshot.png?raw=true" alt="Screenshot of httx"></p>
+
 ## Install
 
 ```bash
