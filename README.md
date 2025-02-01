@@ -10,6 +10,8 @@
 
 > httx is a simple, fast, lightweight and user-friendly API client. Whether you are working with a CLI, a library or a server, httx is a perfect choice for making HTTP requests.
 
+<p align="center"><img src="https://github.com/stacksjs/httx/blob/main/.github/art/screenshot.png?raw=true" alt="Screenshot of httx"></p>
+
 ## Features
 
 - 🌐 **API Requests**: _make API requests_
@@ -19,8 +21,6 @@
 - 🪶 **Lightweight**: _built on web standards, lightweight & without dependencies_
 - 🐶 **User-Friendly**: _user-friendly, simple, powerful API_
 - 💪🏽 **Type-Safe**: _strongly-typed, including type-safe errors_
-
-<p align="center"><img src="https://github.com/stacksjs/httx/blob/main/.github/art/screenshot.png?raw=true" alt="Screenshot of httx"></p>
 
 ## Install
 
