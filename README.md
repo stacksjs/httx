@@ -14,10 +14,10 @@
 
 ## Features
 
-- 🌐 **API Requests**: _make API requests_
+- 🌐 **API Requests**: _easily make API requests in a familiar way_
 - 🤖 **CLI**: _a cross-platform CLI_
 - 📚 **Library**: _use httx as a library in your project_
-- ⚡ **Fast**: _extremely fast and efficient_
+- ⚡ **Performant**: _extremely fast and efficient_
 - 🪶 **Lightweight**: _built on web standards, lightweight & without dependencies_
 - 🐶 **User-Friendly**: _user-friendly, simple, powerful API_
 - 💪🏽 **Type-Safe**: _strongly-typed, including type-safe errors_
