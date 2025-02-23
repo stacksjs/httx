@@ -70,7 +70,7 @@
     "consola": "^3.4.0",
     "neverthrow": "^8.1.1",
     "typescript": "^5.7.3",
-    "unocss": "^65.5.0"
+    "unocss": "^66.0.0"
   },
   "overrides": {
     "unconfig": "0.3.10"
