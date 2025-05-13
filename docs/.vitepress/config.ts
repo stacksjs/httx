@@ -60,6 +60,35 @@ const sidebar = [
       { text: 'Config', link: '/config' },
     ],
   },
+  {
+    text: 'Features',
+    items: [
+      { text: 'Request Methods', link: '/features/request-methods' },
+      { text: 'Content Types', link: '/features/content-types' },
+      { text: 'Query Parameters', link: '/features/query-params' },
+      { text: 'Headers', link: '/features/headers' },
+      { text: 'Error Handling', link: '/features/error-handling' },
+    ],
+  },
+  {
+    text: 'Advanced',
+    items: [
+      { text: 'Debug Logging', link: '/advanced/debug-logging' },
+      { text: 'Timeout Configuration', link: '/advanced/timeout' },
+      { text: 'Base URL Setup', link: '/advanced/base-url' },
+      { text: 'Response Timing', link: '/advanced/timing' },
+      { text: 'Custom Headers', link: '/advanced/custom-headers' },
+    ],
+  },
+  {
+    text: 'API Reference',
+    items: [
+      { text: 'HttxClient', link: '/api/client' },
+      { text: 'Configuration', link: '/api/config' },
+      { text: 'Types', link: '/api/types' },
+      { text: 'Interfaces', link: '/api/interfaces' },
+    ],
+  },
   { text: 'Showcase', link: '/Showcase' },
 ]
 const description = 'A modern, fast reverse proxy. For a better local development environment.'
