@@ -82,7 +82,7 @@
     "consola": "^3.4.2",
     "neverthrow": "^8.2.0",
     "typescript": "^5.9.2",
-    "unocss": "^66.4.2"
+    "unocss": "^66.5.0"
   },
   "overrides": {
     "unconfig": "0.3.10"
