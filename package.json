@@ -77,7 +77,7 @@
     "buddy-bot": "^0.8.9",
     "bun-git-hooks": "^0.2.19",
     "bun-plugin-dtsx": "^0.21.12",
-    "bunfig": "^0.14.1",
+    "bunfig": "^0.15.0",
     "cac": "^6.7.14",
     "consola": "^3.4.2",
     "neverthrow": "^8.2.0",
