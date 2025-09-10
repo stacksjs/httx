@@ -68,12 +68,12 @@
     "zip:darwin-arm64": "zip -j bin/httx-darwin-arm64.zip bin/httx-darwin-arm64"
   },
   "devDependencies": {
-    "@stacksjs/bumpx": "^0.1.17",
+    "@stacksjs/bumpx": "^0.1.83",
     "@stacksjs/docs": "^0.70.23",
     "@stacksjs/eslint-config": "^3.13.1-beta.2",
     "@stacksjs/gitlint": "^0.1.5",
-    "@stacksjs/logsmith": "^0.1.8",
-    "@types/bun": "^1.2.13",
+    "@stacksjs/logsmith": "^0.1.18",
+    "@types/bun": "^1.2.21",
     "buddy-bot": "^0.8.9",
     "bun-git-hooks": "^0.2.19",
     "bun-plugin-dtsx": "^0.21.12",
@@ -81,8 +81,8 @@
     "cac": "^6.7.14",
     "consola": "^3.4.2",
     "neverthrow": "^8.2.0",
-    "typescript": "^5.8.3",
-    "unocss": "^66.1.1"
+    "typescript": "^5.9.2",
+    "unocss": "^66.5.1"
   },
   "overrides": {
     "unconfig": "0.3.10"
