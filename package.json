@@ -68,7 +68,7 @@
     "zip:darwin-arm64": "zip -j bin/httx-darwin-arm64.zip bin/httx-darwin-arm64"
   },
   "devDependencies": {
-    "@stacksjs/bumpx": "^0.1.78",
+    "@stacksjs/bumpx": "^0.1.82",
     "@stacksjs/docs": "^0.70.23",
     "@stacksjs/eslint-config": "^3.13.1-beta.2",
     "@stacksjs/gitlint": "^0.1.5",
