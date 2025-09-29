@@ -1,6 +1,9 @@
+import { Logger } from '@stacksjs/clarity'
 import { dts } from 'bun-plugin-dtsx'
 
-console.log('Building...')
+const logger = new Logger('httx:build')
+
+logger.debug('Building...')
 
 await Bun.build({
   entrypoints: ['./src/index.ts', './bin/cli.ts'],
@@ -12,4 +15,4 @@ await Bun.build({
   plugins: [dts()],
 })
 
-console.log('Built')
+logger.success('Built')

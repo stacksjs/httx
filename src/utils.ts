@@ -1,4 +1,9 @@
 import { config } from './config'
+import { Logger} from '@stacksjs/clarity'
+
+const logger = new Logger('httx', {
+  showTags: false
+})
 
 export function debugLog(category: string, message: string, verbose?: boolean | string[]): void {
   if (verbose === false) {
@@ -6,16 +11,14 @@ export function debugLog(category: string, message: string, verbose?: boolean | 
   }
 
   if (verbose === true || config.verbose === true) {
-    // eslint-disable-next-line no-console
-    console.debug(`[httx:${category}] ${message}`)
+    logger.debug(`[httx:${category}] ${message}`)
   }
 
   if (Array.isArray(verbose)) {
     // Check if any of the verbose categories match the prefix
     const matches = verbose.some(prefix => category.startsWith(prefix))
     if (matches) {
-      // eslint-disable-next-line no-console
-      console.log(`[httx:${category}] ${message}`)
+      logger.debug(`[httx:${category}] ${message}`)
     }
   }
 
@@ -23,8 +26,7 @@ export function debugLog(category: string, message: string, verbose?: boolean | 
     // Check if any of the verbose categories match the prefix
     const matches = config.verbose.some(prefix => category.startsWith(prefix))
     if (matches) {
-      // eslint-disable-next-line no-console
-      console.log(`[httx:${category}] ${message}`)
+      logger.debug(`[httx:${category}] ${message}`)
     }
   }
 }
