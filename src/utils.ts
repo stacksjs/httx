@@ -1,32 +1,41 @@
 import { config } from './config'
-import { Logger} from '@stacksjs/clarity'
+import { Logger } from '@stacksjs/clarity'
 
 const logger = new Logger('httx', {
-  showTags: false
+  showTags: false,
 })
 
-export function debugLog(category: string, message: string, verbose?: boolean | string[]): void {
+function shouldLog(category: string, verbose?: boolean | string[]): boolean {
   if (verbose === false) {
-    return
+    return false
   }
 
   if (verbose === true || config.verbose === true) {
-    logger.debug(`[httx:${category}] ${message}`)
+    return true
   }
 
-  if (Array.isArray(verbose)) {
-    // Check if any of the verbose categories match the prefix
-    const matches = verbose.some(prefix => category.startsWith(prefix))
-    if (matches) {
-      logger.debug(`[httx:${category}] ${message}`)
+  // Check both verbose parameter and config for array matching
+  const verboseArrays = [verbose, config.verbose].filter(v => Array.isArray(v)) as string[][]
+
+  for (const verboseArray of verboseArrays) {
+    if (verboseArray.some(prefix => category.startsWith(prefix))) {
+      return true
     }
   }
 
-  if (Array.isArray(config.verbose)) {
-    // Check if any of the verbose categories match the prefix
-    const matches = config.verbose.some(prefix => category.startsWith(prefix))
-    if (matches) {
-      logger.debug(`[httx:${category}] ${message}`)
-    }
+  return false
+}
+
+export function debugLog(category: string, message: string | (() => string), verbose?: boolean | string[]): void {
+  if (!shouldLog(category, verbose)) {
+    return
   }
+
+  // Lazy evaluation: only compute message if logging will occur
+  const actualMessage = typeof message === 'function' ? message() : message
+  logger.debug(`[httx:${category}] ${actualMessage}`)
+}
+
+export async function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }

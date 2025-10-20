@@ -1,12 +1,12 @@
 # Error Handling
 
-Httx uses the `neverthrow` library to provide type-safe error handling. All requests return a `Result` type that can be either a success or an error.
+Httx uses the `ts-error-handling` library to provide type-safe error handling. All requests return a `Result` type that can be either a success or an error.
 
 ## Basic Usage
 
 ```typescript
 import { HttxClient } from 'httx'
-import { err, ok } from 'neverthrow'
+import { err, ok } from 'ts-error-handling'
 
 const client = new HttxClient()
 

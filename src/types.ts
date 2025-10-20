@@ -18,6 +18,13 @@ export interface BunFetchInit extends Omit<RequestInit, 'body'> {
   body?: BodyInit | Record<string, string>
 }
 
+export interface RetryOptions {
+  retries?: number
+  retryDelay?: number
+  retryOn?: number[]
+  shouldRetry?: (error: Error, attempt: number) => boolean
+}
+
 export interface RequestOptions extends Omit<BunFetchInit, 'method'> {
   method: HttpMethod
   query?: Record<string, string>
@@ -27,6 +34,9 @@ export interface RequestOptions extends Omit<BunFetchInit, 'method'> {
   unix?: string
   proxy?: string
   downloadProgress?: (progress: number) => void
+  retry?: RetryOptions
+  stream?: boolean
+  acceptHeader?: string
 }
 
 export interface HttxConfig {
@@ -34,7 +44,10 @@ export interface HttxConfig {
   defaultHeaders?: Record<string, string>
   baseUrl?: string
   timeout?: number
+  retry?: RetryOptions
 }
+
+export type HttxOptions = Partial<HttxConfig>
 
 export interface HttxResponse<T = unknown> {
   status: number

@@ -1,6 +1,6 @@
 ---
 description: Error Handling and Validation specifics
-globs: 
+globs:
 ---
 ## Error Handling and Validation
 
@@ -8,4 +8,3 @@ globs:
 - Use early returns and guard clauses
 - Implement proper error logging and user-friendly messages
 - Use error boundaries for unexpected errors
-- when `neverthrow` is available, ensure errors are typed

@@ -1,12 +1,12 @@
 import { Buffer } from 'node:buffer'
 import process from 'node:process'
-import { CAC } from 'cac'
+import { CLI } from '@stacksjs/clapp'
 import { version } from '../package.json'
 import { parseCliArgs } from '../src/cli-parser'
 import { HttxClient } from '../src/client'
 import { config } from '../src/config'
 
-const cli = new CAC('httx')
+const cli = new CLI('httx')
 
 cli
   .command('[method] [url] [...items]', 'Make an HTTP request')
