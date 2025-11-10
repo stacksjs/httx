@@ -5,7 +5,6 @@ import { version } from '../package.json'
 import { parseCliArgs } from '../src/cli-parser'
 import { HttxClient } from '../src/client'
 import { config } from '../src/config'
-import type { HttxResponse } from '../src/types'
 
 const cli = new CLI('httx')
 
