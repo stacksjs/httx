@@ -24,7 +24,7 @@ describe('httx CLI', () => {
   describe('POST requests', () => {
     it('should create new post with JSON data', async () => {
       const output = execSync(
-        `${cli} -j post https://dummyjson.com/products/add title="Test Product" price=99.99`,
+        `${cli} -j post https://dummyjson.com/products/add title="Test Product" price:=99.99`,
       ).toString()
       const response = JSON.parse(output)
       expect(response.id).toBeDefined()
@@ -64,10 +64,10 @@ describe('httx CLI', () => {
   describe('Authentication', () => {
     it('should handle basic auth', async () => {
       const output = execSync(
-        `${cli} -j post https://dummyjson.com/auth/login username=kminchelle password=0lelplR`,
+        `${cli} -j post https://dummyjson.com/auth/login username=emilys password=emilyspass`,
       ).toString()
       const response = JSON.parse(output)
-      expect(response.token).toBeDefined()
+      expect(response.accessToken).toBeDefined()
     })
   })
 
@@ -111,7 +111,7 @@ describe('httx CLI', () => {
     it('should show headers and timing in verbose mode', async () => {
       const output = execSync(`${cli} -v get https://dummyjson.com/todos/1`).toString()
       expect(output).toContain('Response Headers:')
-      expect(output).toMatch(/\[\w+:\w+\] \d{3} \w+ \(\d+\.\d+ms\)/)
+      expect(output).toMatch(/Request completed in \d+\.\d+ms/)
     })
   })
 })

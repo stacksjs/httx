@@ -3,11 +3,11 @@ import { HTTP_METHODS } from './types'
 import { debugLog } from './utils'
 
 const REQUEST_PATTERNS = {
-  HEADER: /^([^:=@]+):(.+)$/,
-  DATA: /^([^:=@]+)=(.+)$/,
-  RAW_JSON: /^([^:=@]+):=(.+)$/,
-  FILE_UPLOAD: /^([^:=@]+)@(.+)$/,
   QUERY: /^([^:=@]+)==(.+)$/,
+  RAW_JSON: /^([^:=@]+):=(.+)$/,
+  HEADER: /^([^:=@]+):([^=].*)$/,
+  DATA: /^([^:=@]+)=([^=].*)$/,
+  FILE_UPLOAD: /^([^:=@]+)@(.+)$/,
 } as const
 
 interface ParsedArgs {
