@@ -5,6 +5,7 @@ import { version } from '../package.json'
 import { parseCliArgs } from '../src/cli-parser'
 import { HttxClient } from '../src/client'
 import { config } from '../src/config'
+import type { HttxResponse } from '../src/types'
 
 const cli = new CLI('httx')
 
@@ -53,44 +54,44 @@ cli
 
       const result = await client.request(parsedArgs.url, options)
 
-      result.match(
-        (response) => {
-          if (flags.download)
-            process.stdout.write('\n')
+      if (result.isOk) {
+        const response = result.value
+        if (flags.download)
+          process.stdout.write('\n')
 
-          // Print Response Headers
-          if (flags.verbose) {
-            console.log('\nResponse Headers:')
-            response.headers.forEach((value, key) => console.log(`${key}: ${value}`))
-            console.log('\nResponse Body:')
-          }
+        // Print Response Headers
+        if (flags.verbose) {
+          console.log('\nResponse Headers:')
+          response.headers.forEach((value: string, key: string) => console.log(`${key}: ${value}`))
+          console.log('\nResponse Body:')
+        }
 
-          // Handle Response Body
-          const contentType = response.headers.get('content-type')
-          if (contentType?.includes('application/json')) {
-            console.log(JSON.stringify(response.data, null, 2))
-          }
-          else if (typeof response.data === 'string' || Buffer.isBuffer(response.data)) {
-            process.stdout.write(response.data)
-          }
-          else {
-            console.log(response.data)
-          }
+        // Handle Response Body
+        const contentType = response.headers.get('content-type')
+        if (contentType?.includes('application/json')) {
+          console.log(JSON.stringify(response.data, null, 2))
+        }
+        else if (typeof response.data === 'string' || Buffer.isBuffer(response.data)) {
+          process.stdout.write(response.data)
+        }
+        else {
+          console.log(response.data)
+        }
 
-          // Print Timing Info
-          if (flags.verbose) {
-            console.log(`\nRequest completed in ${response.timings.duration.toFixed(2)}ms`)
-          }
+        // Print Timing Info
+        if (flags.verbose) {
+          console.log(`\nRequest completed in ${response.timings.duration.toFixed(2)}ms`)
+        }
 
-          process.exit(0)
-        },
-        (error) => {
-          console.error('Error:', error.message)
-          if (flags.verbose && error.cause)
-            console.error('Cause:', error.cause)
-          process.exit(1)
-        },
-      )
+        process.exit(0)
+      }
+      else {
+        const error = result.error
+        console.error('Error:', error.message)
+        if (flags.verbose && error.cause)
+          console.error('Cause:', error.cause)
+        process.exit(1)
+      }
     }
     catch (error) {
       console.error('Error:', error instanceof Error ? error.message : String(error))

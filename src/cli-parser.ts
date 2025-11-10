@@ -73,7 +73,9 @@ export function parseCliArgs(args: string[]): ParsedArgs {
 
       switch (type) {
         case 'HEADER': {
-          options.headers[key.trim()] = value.trim()
+          if (options.headers) {
+            (options.headers as Record<string, string>)[key.trim()] = value.trim()
+          }
           break
         }
         case 'DATA': {

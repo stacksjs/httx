@@ -6,7 +6,6 @@ export const defaultConfig: HttxConfig = {
   verbose: true,
 }
 
-// @ts-expect-error bunfig issue
 // eslint-disable-next-line antfu/no-top-level-await
 export const config: HttxConfig = await loadConfig({
   name: 'httx',

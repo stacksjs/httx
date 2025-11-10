@@ -34,18 +34,18 @@ export class HttxClient {
 
       const result = await this.executeRequest<T>(url, options)
 
-      if (result.isOk()) {
+      if (result.isOk) {
         return result
       }
 
-      lastError = result.unwrapErr()
+      lastError = result.error
 
       // Check if we should retry
-      if (!this.shouldRetry(lastError, attempt, retryOptions)) {
+      if (!lastError || !this.shouldRetry(lastError, attempt, retryOptions)) {
         break
       }
 
-      debugLog('retry', () => `Request failed: ${lastError.message}`, this.config.verbose)
+      debugLog('retry', () => `Request failed: ${lastError!.message}`, this.config.verbose)
     }
 
     return err(lastError || new Error('Request failed'))
@@ -68,7 +68,11 @@ export class HttxClient {
       const headers = this.buildHeaders(options)
       const body = await this.buildBody(options)
 
-      debugLog('request', () => `Request headers: ${JSON.stringify(Object.fromEntries(headers.entries()))}`, this.config.verbose)
+      debugLog('request', () => {
+        const headerEntries: Array<[string, string]> = []
+        headers.forEach((value, key) => headerEntries.push([key, value]))
+        return `Request headers: ${JSON.stringify(Object.fromEntries(headerEntries))}`
+      }, this.config.verbose)
       if (body) {
         debugLog('request', () => `Request body: ${typeof body === 'string' ? body : '[FormData/Binary]'}`, this.config.verbose)
       }
@@ -126,8 +130,8 @@ export class HttxClient {
     catch (error) {
       if (error instanceof Error) {
         if (error.name === 'TimeoutError' || error.name === 'AbortError') {
-          const timeout = options.timeout || this.config.timeout
-          return err(new HttxTimeoutError(options.method, url, timeout))
+          const timeout = options.timeout || this.config.timeout || 30000
+          return err(new HttxTimeoutError(options.method, url, timeout) as Error)
         }
 
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
@@ -136,7 +140,7 @@ export class HttxClient {
             options.method,
             url,
             error,
-          ))
+          ) as Error)
         }
 
         return err(error)
@@ -276,7 +280,7 @@ export class HttxClient {
 
   private calculateRetryDelay(attempt: number, baseDelay: number): number {
     // Exponential backoff with jitter
-    const exponentialDelay = baseDelay * Math.pow(2, attempt - 1)
+    const exponentialDelay = baseDelay * 2 ** (attempt - 1)
     const jitter = Math.random() * 0.3 * exponentialDelay
     return Math.min(exponentialDelay + jitter, 30000) // Max 30s
   }
@@ -298,7 +302,7 @@ export class HttxClient {
 
     // Retry specific HTTP status codes
     if (error instanceof HttxResponseError) {
-      if (options.retryOn && options.retryOn.includes(error.statusCode)) {
+      if (options.retryOn && error.statusCode && options.retryOn.includes(error.statusCode)) {
         return options.shouldRetry(error, attempt)
       }
       return false

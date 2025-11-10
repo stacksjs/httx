@@ -1,5 +1,5 @@
-import { config } from './config'
 import { Logger } from '@stacksjs/clarity'
+import { config } from './config'
 
 const logger = new Logger('httx', {
   showTags: false,
