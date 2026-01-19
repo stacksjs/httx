@@ -53,48 +53,50 @@ cli
 
       const result = await client.request(parsedArgs.url, options)
 
-      if (result.isOk) {
-        const response = result.value
-        if (flags.download)
-          process.stdout.write('\n')
+      result.match({
+        ok: (response) => {
+          if (flags.download)
+            process.stdout.write('\n')
 
-        // Print Response Headers
-        if (flags.verbose) {
-          console.log('\nResponse Headers:')
-          response.headers.forEach((value: string, key: string) => console.log(`${key}: ${value}`))
-          console.log('\nResponse Body:')
-        }
+          // Print Response Headers
+          if (flags.verbose) {
+            console.log('\nResponse Headers:')
+            response.headers.forEach((value: string, key: string) => console.log(`${key}: ${value}`))
+            console.log('\nResponse Body:')
+          }
 
-        // Handle Response Body
-        const contentType = response.headers.get('content-type')
-        if (contentType?.includes('application/json')) {
-          console.log(JSON.stringify(response.data, null, 2))
-        }
-        else if (typeof response.data === 'string' || Buffer.isBuffer(response.data)) {
-          process.stdout.write(response.data)
-        }
-        else {
-          console.log(response.data)
-        }
+          // Handle Response Body
+          const contentType = response.headers.get('content-type')
+          if (contentType?.includes('application/json')) {
+            console.log(JSON.stringify(response.data, null, 2))
+          }
+          else if (typeof response.data === 'string' || Buffer.isBuffer(response.data)) {
+            process.stdout.write(response.data)
+          }
+          else {
+            console.log(response.data)
+          }
 
-        // Print Timing Info
-        if (flags.verbose) {
-          console.log(`\nRequest completed in ${response.timings.duration.toFixed(2)}ms`)
-        }
-
-        process.exit(0)
-      }
-      else {
-        const error = result.error
-        console.error('Error:', error.message)
-        if (flags.verbose && error.cause)
-          console.error('Cause:', error.cause)
-        process.exit(1)
-      }
+          // Print Timing Info
+          if (flags.verbose) {
+            console.log(`\nRequest completed in ${response.timings.duration.toFixed(2)}ms`)
+          }
+        },
+        err: (error) => {
+          console.error('Error:', error.message)
+          if (flags.verbose) {
+            if (error.cause)
+              console.error('Cause:', error.cause)
+            if (error.stack)
+              console.error('Stack:', error.stack)
+          }
+          process.exitCode = 1
+        },
+      })
     }
     catch (error) {
       console.error('Error:', error instanceof Error ? error.message : String(error))
-      process.exit(1)
+      process.exitCode = 1
     }
   })
 
@@ -105,7 +107,7 @@ cli
     console.log('Shell completion not implemented yet')
   })
 
-cli.command('version', 'Show the version of the Reverse Proxy CLI').action(() => {
+cli.command('version', 'Show the version of httx').action(() => {
   console.log(version)
 })
 

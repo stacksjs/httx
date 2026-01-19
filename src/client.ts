@@ -45,7 +45,7 @@ export class HttxClient {
         break
       }
 
-      debugLog('retry', () => `Request failed: ${lastError!.message}`, this.config.verbose)
+      debugLog('retry', () => `Request failed: ${lastError?.message || 'Unknown error'}`, this.config.verbose)
     }
 
     return err(lastError || new Error('Request failed'))
@@ -69,9 +69,11 @@ export class HttxClient {
       const body = await this.buildBody(options)
 
       debugLog('request', () => {
-        const headerEntries: Array<[string, string]> = []
-        headers.forEach((value, key) => headerEntries.push([key, value]))
-        return `Request headers: ${JSON.stringify(Object.fromEntries(headerEntries))}`
+        const headerObj: Record<string, string> = {}
+        headers.forEach((value, key) => {
+          headerObj[key] = value
+        })
+        return `Request headers: ${JSON.stringify(headerObj)}`
       }, this.config.verbose)
       if (body) {
         debugLog('request', () => `Request body: ${typeof body === 'string' ? body : '[FormData/Binary]'}`, this.config.verbose)
@@ -130,7 +132,7 @@ export class HttxClient {
     catch (error) {
       if (error instanceof Error) {
         if (error.name === 'TimeoutError' || error.name === 'AbortError') {
-          const timeout = options.timeout || this.config.timeout || 30000
+          const timeout = options.timeout || this.config.timeout
           return err(new HttxTimeoutError(options.method, url, timeout) as Error)
         }
 
