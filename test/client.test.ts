@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, mock } from 'bun:test'
 import { HttxClient } from '../src/client'
-import { HttxNetworkError, HttxResponseError, HttxTimeoutError } from '../src/errors'
+import { HttxResponseError, HttxTimeoutError } from '../src/errors'
 
 describe('HttxClient', () => {
   let client: HttxClient

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, mock } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
 import { debugLog, sleep } from '../src/utils'
 
 describe('Utils', () => {
