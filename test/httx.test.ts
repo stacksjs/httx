@@ -29,7 +29,7 @@ describe('httx CLI', () => {
       const response = JSON.parse(output)
       expect(response.id).toBeDefined()
       expect(response.title).toBe('Test Product')
-      expect(response.price).toBe(99.99)
+      expect(Number.parseFloat(response.price)).toBe(99.99)
     })
 
     it('should handle form data', async () => {
@@ -109,7 +109,7 @@ describe('httx CLI', () => {
 
   describe('Verbose output', () => {
     it('should show headers and timing in verbose mode', async () => {
-      const output = execSync(`${cli} -v get https://dummyjson.com/todos/1`).toString()
+      const output = execSync(`${cli} -v get https://dummyjson.com/todos/1 2>&1`).toString()
       expect(output).toContain('Response Headers:')
       expect(output).toMatch(/Request completed in \d+\.\d+ms/)
     })

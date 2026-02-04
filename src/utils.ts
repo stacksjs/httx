@@ -6,21 +6,29 @@ const logger = new Logger('httx', {
 })
 
 function shouldLog(category: string, verbose?: boolean | string[]): boolean {
-  if (verbose === false) {
-    return false
+  // When verbose is explicitly provided, use it and don't fall back to config
+  if (verbose !== undefined) {
+    if (verbose === false) {
+      return false
+    }
+
+    if (verbose === true) {
+      return true
+    }
+
+    // verbose is an array - check if category matches any prefix
+    if (Array.isArray(verbose)) {
+      return verbose.some(prefix => category.startsWith(prefix))
+    }
   }
 
-  if (verbose === true || config.verbose === true) {
+  // Fall back to config.verbose when no explicit verbose parameter
+  if (config.verbose === true) {
     return true
   }
 
-  // Check both verbose parameter and config for array matching
-  const verboseArrays = [verbose, config.verbose].filter(v => Array.isArray(v)) as string[][]
-
-  for (const verboseArray of verboseArrays) {
-    if (verboseArray.some(prefix => category.startsWith(prefix))) {
-      return true
-    }
+  if (Array.isArray(config.verbose)) {
+    return config.verbose.some(prefix => category.startsWith(prefix))
   }
 
   return false

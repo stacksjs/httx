@@ -6,9 +6,19 @@ export const defaultConfig: HttxConfig = {
   verbose: true,
 }
 
-// eslint-disable-next-line antfu/no-top-level-await
-export const config: HttxConfig = await loadConfig({
-  name: 'httx',
-  cwd: resolve(__dirname, '..'),
-  defaultConfig,
-})
+// Lazy-loaded config to avoid top-level await (enables bun --compile)
+let _config: HttxConfig | null = null
+
+export async function getConfig(): Promise<HttxConfig> {
+  if (!_config) {
+    _config = await loadConfig({
+      name: 'httx',
+      cwd: resolve(__dirname, '..'),
+      defaultConfig,
+    })
+  }
+  return _config
+}
+
+// For backwards compatibility - synchronous access with default fallback
+export const config: HttxConfig = defaultConfig
